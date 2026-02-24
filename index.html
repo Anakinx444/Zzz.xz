@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>YN | Key System</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #080810;
+    --surface: #0e0e1a;
+    --border: rgba(88,101,242,0.2);
+    --accent: #5865F2;
+    --accent2: #8b5cf6;
+    --text: #e2e2f0;
+    --muted: #5a5a7a;
+    --success: #22c55e;
+    --error: #ef4444;
+    --warn: #f59e0b;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* ── Background Effects ── */
+  .bg-grid {
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(88,101,242,0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(88,101,242,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+  }
+
+  .orb {
+    position: fixed;
+    border-radius: 50%;
+    filter: blur(80px);
+    pointer-events: none;
+    animation: drift 12s ease-in-out infinite;
+  }
+  .orb-1 {
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(88,101,242,0.15), transparent 70%);
+    top: -100px; left: -100px;
+    animation-delay: 0s;
+  }
+  .orb-2 {
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(139,92,246,0.12), transparent 70%);
+    bottom: -80px; right: -80px;
+    animation-delay: -6s;
+  }
+
+  @keyframes drift {
+    0%, 100% { transform: translate(0, 0); }
+    50% { transform: translate(30px, 20px); }
+  }
+
+  /* ── Particle ── */
+  .particles { position: fixed; inset: 0; pointer-events: none; }
+  .particle {
+    position: absolute;
+    width: 2px; height: 2px;
+    background: var(--accent);
+    border-radius: 50%;
+    opacity: 0;
+    animation: float-up linear infinite;
+  }
+
+  @keyframes float-up {
+    0% { opacity: 0; transform: translateY(0) scale(0); }
+    10% { opacity: 0.6; transform: translateY(-20px) scale(1); }
+    100% { opacity: 0; transform: translateY(-200px) scale(0); }
+  }
+
+  /* ── Card ── */
+  .card {
+    position: relative;
+    width: 100%;
+    max-width: 460px;
+    padding: 2.5rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    z-index: 10;
+    opacity: 0;
+    transform: translateY(30px);
+    animation: slide-in 0.6s cubic-bezier(0.34,1.56,0.64,1) 0.2s forwards;
+    box-shadow:
+      0 0 0 1px rgba(88,101,242,0.05),
+      0 20px 60px rgba(0,0,0,0.5),
+      0 0 80px rgba(88,101,242,0.05);
+  }
+
+  @keyframes slide-in {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), var(--accent2), transparent);
+    opacity: 0.6;
+  }
+
+  /* ── Header ── */
+  .header { text-align: center; margin-bottom: 2rem; }
+
+  .icon-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 16px;
+    font-size: 28px;
+    margin-bottom: 1.2rem;
+    box-shadow: 0 8px 24px rgba(88,101,242,0.4);
+    animation: icon-pulse 3s ease-in-out infinite;
+  }
+
+  @keyframes icon-pulse {
+    0%, 100% { box-shadow: 0 8px 24px rgba(88,101,242,0.4); }
+    50% { box-shadow: 0 8px 32px rgba(88,101,242,0.7); }
+  }
+
+  h1 {
+    font-size: 1.6rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+    background: linear-gradient(135deg, #fff, rgba(255,255,255,0.6));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+
+  .subtitle {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    margin-top: 0.4rem;
+  }
+
+  /* ── Divider ── */
+  .divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+    margin: 1.5rem 0;
+  }
+
+  /* ── Input ── */
+  .input-group { margin-bottom: 1rem; }
+
+  .input-label {
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--muted);
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .input-icon {
+    position: absolute;
+    left: 14px;
+    font-size: 16px;
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    padding: 0.85rem 1rem 0.85rem 2.6rem;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 1px;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+  }
+
+  input[type="text"]::placeholder { color: var(--muted); letter-spacing: 0.5px; }
+
+  input[type="text"]:focus {
+    border-color: var(--accent);
+    background: rgba(88,101,242,0.05);
+    box-shadow: 0 0 0 3px rgba(88,101,242,0.12);
+  }
+
+  /* ── Status ── */
+  .status {
+    min-height: 36px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.82rem;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+    opacity: 0;
+    transition: opacity 0.3s, background 0.3s;
+  }
+  .status.show { opacity: 1; }
+  .status.success { background: rgba(34,197,94,0.1); color: var(--success); }
+  .status.error   { background: rgba(239,68,68,0.1);  color: var(--error); }
+  .status.warn    { background: rgba(245,158,11,0.1); color: var(--warn); }
+  .status.loading { background: rgba(88,101,242,0.1); color: var(--accent); }
+
+  /* ── Button ── */
+  .btn {
+    width: 100%;
+    padding: 0.9rem;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .btn::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent);
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .btn:hover:not(:disabled)::after { opacity: 1; }
+  .btn:hover:not(:disabled) {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(88,101,242,0.5);
+  }
+  .btn:active:not(:disabled) { transform: translateY(0); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+  /* ── Spinner ── */
+  .spinner {
+    display: inline-block;
+    width: 14px; height: 14px;
+    border: 2px solid rgba(255,255,255,0.3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: spin 0.7s linear infinite;
+    margin-right: 8px;
+    vertical-align: middle;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  /* ── Footer ── */
+  .footer {
+    text-align: center;
+    margin-top: 1.5rem;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.68rem;
+    color: var(--muted);
+    letter-spacing: 0.5px;
+  }
+
+  .footer a {
+    color: var(--accent);
+    text-decoration: none;
+    opacity: 0.8;
+    transition: opacity 0.2s;
+  }
+  .footer a:hover { opacity: 1; }
+
+  /* ── Success Overlay ── */
+  .success-overlay {
+    display: none;
+    position: absolute;
+    inset: 0;
+    background: var(--surface);
+    border-radius: 20px;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 1rem;
+    z-index: 20;
+    text-align: center;
+    padding: 2rem;
+  }
+  .success-overlay.show { display: flex; animation: fade-in 0.4s ease; }
+
+  @keyframes fade-in { from { opacity: 0; } to { opacity: 1; } }
+
+  .success-icon {
+    font-size: 3rem;
+    animation: bounce 0.6s cubic-bezier(0.34,1.56,0.64,1);
+  }
+  @keyframes bounce {
+    0% { transform: scale(0); }
+    100% { transform: scale(1); }
+  }
+
+  .success-title {
+    font-size: 1.3rem;
+    font-weight: 800;
+    color: var(--success);
+  }
+
+  .success-key {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--muted);
+    background: rgba(255,255,255,0.04);
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    word-break: break-all;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-grid"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="particles" id="particles"></div>
+
+<div class="card" id="card">
+
+  <!-- Success Overlay -->
+  <div class="success-overlay" id="successOverlay">
+    <div class="success-icon">✅</div>
+    <div class="success-title">เข้าใช้งานสำเร็จ!</div>
+    <div class="success-key" id="successKey"></div>
+    <p style="color:var(--muted);font-size:0.8rem;line-height:1.6">
+      Key ของคุณผ่านการตรวจสอบแล้ว<br>สามารถใช้งาน Script ได้เลยครับ
+    </p>
+  </div>
+
+  <!-- Header -->
+  <div class="header">
+    <div class="icon-wrap">🔑</div>
+    <h1>Key System</h1>
+    <p class="subtitle">YN Whitelist • Discord Bot</p>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Input -->
+  <div class="input-group">
+    <label class="input-label" for="keyInput">กรอก Key ของคุณ</label>
+    <div class="input-wrap">
+      <span class="input-icon">🗝️</span>
+      <input
+        type="text"
+        id="keyInput"
+        placeholder="YN-XXXXXXXX-XXXXXXXX-XXXXXXXX"
+        autocomplete="off"
+        spellcheck="false"
+      >
+    </div>
+  </div>
+
+  <!-- Status -->
+  <div class="status" id="status"></div>
+
+  <!-- Button -->
+  <button class="btn" id="submitBtn" onclick="authenticate()">
+    ยืนยัน Key
+  </button>
+
+  <div class="divider"></div>
+
+  <!-- Footer -->
+  <div class="footer">
+    ยังไม่มี Key? ซื้อได้ที่
+    <a href="#" target="_blank">Discord Server</a>
+    &nbsp;•&nbsp; Reset HWID ผ่าน Bot ในช่อง Buyer Panel
+  </div>
+
+</div>
+
+<script>
+  // ── Config ─────────────────────────────────────────────
+  const PROJECT_NAME = 'Yn';
+  // HWID จำลองจาก Browser Fingerprint
+  async function getHWID() {
+    const raw = [
+      navigator.userAgent,
+      navigator.language,
+      screen.width + 'x' + screen.height,
+      screen.colorDepth,
+      new Date().getTimezoneOffset(),
+      navigator.hardwareConcurrency,
+      navigator.platform,
+    ].join('|');
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(raw));
+    return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2,'0')).join('').slice(0, 32);
+  }
+
+  // ── Particles ───────────────────────────────────────────
+  const container = document.getElementById('particles');
+  for (let i = 0; i < 20; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.cssText = `
+      left: ${Math.random() * 100}%;
+      top: ${60 + Math.random() * 40}%;
+      animation-duration: ${4 + Math.random() * 6}s;
+      animation-delay: ${Math.random() * 8}s;
+      width: ${1 + Math.random() * 2}px;
+      height: ${1 + Math.random() * 2}px;
+      opacity: ${0.3 + Math.random() * 0.4};
+    `;
+    container.appendChild(p);
+  }
+
+  // ── UI Helpers ──────────────────────────────────────────
+  function setStatus(msg, type) {
+    const el = document.getElementById('status');
+    el.className = `status ${type} show`;
+    el.innerHTML = msg;
+  }
+  function clearStatus() {
+    const el = document.getElementById('status');
+    el.className = 'status';
+    el.innerHTML = '';
+  }
+  function setLoading(v) {
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = v;
+    btn.innerHTML = v
+      ? '<span class="spinner"></span>กำลังตรวจสอบ...'
+      : 'ยืนยัน Key';
+  }
+
+  // ── Saved Key ───────────────────────────────────────────
+  const STORAGE_KEY = 'yn_saved_key';
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) document.getElementById('keyInput').value = saved;
+
+  // ── Authenticate ────────────────────────────────────────
+  async function authenticate() {
+    const key = document.getElementById('keyInput').value.trim();
+    if (!key) { setStatus('⚠️ กรุณากรอก Key ก่อนครับ', 'warn'); return; }
+
+    setLoading(true);
+    setStatus('🔄 กำลังเชื่อมต่อ...', 'loading');
+
+    try {
+      const hwid = await getHWID();
+
+      const res = await fetch('/api/auth', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ key, hwid, userid: 'web', gameid: 'web' }),
+      });
+
+      const data = await res.json();
+
+      if (data.success) {
+        localStorage.setItem(STORAGE_KEY, key);
+        clearStatus();
+        document.getElementById('successKey').textContent = key;
+        document.getElementById('successOverlay').classList.add('show');
+      } else {
+        const m = data.message || 'Unknown error';
+        if (m.includes('expired'))    setStatus('❌ Key หมดอายุแล้ว ติดต่อ Admin ครับ', 'error');
+        else if (m.includes('HWID'))  setStatus('❌ HWID ไม่ตรง — Reset HWID ใน Discord ครับ', 'error');
+        else if (m.includes('Wait'))  setStatus(`⏳ ${m}`, 'warn');
+        else if (m.includes('uses'))  setStatus('❌ Key ใช้หมดแล้ว ติดต่อ Admin ครับ', 'error');
+        else if (m.includes('Invalid')) setStatus('❌ Key ไม่ถูกต้องครับ', 'error');
+        else setStatus(`❌ ${m}`, 'error');
+        setLoading(false);
+      }
+    } catch (err) {
+      setStatus('❌ เชื่อมต่อ API ไม่ได้ ลองใหม่อีกครั้งครับ', 'error');
+      setLoading(false);
+    }
+  }
+
+  // Enter key
+  document.getElementById('keyInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') authenticate();
+  });
+</script>
+</body>
+</html>
